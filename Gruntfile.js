@@ -318,6 +318,8 @@ module.exports = function (grunt) {
     'karma'
   ]);
 
+  grunt.loadNpmTasks('grunt-google-cdn');
+
   grunt.registerTask('build', [
     'clean:dist',
     'useminPrepare',
@@ -326,7 +328,6 @@ module.exports = function (grunt) {
     'concat',
     'ngmin',
     'copy:dist',
-    'cdnify',
     'cssmin',
     'uglify',
     'rev',
