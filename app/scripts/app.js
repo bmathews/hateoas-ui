@@ -4,15 +4,18 @@ angular.module('hateoasUiApp', [
   'ngCookies',
   'ngResource',
   'ngSanitize',
-  'ngRoute'
+  'ngRoute',
+  'ui.bootstrap'
 ])
-  .config(function ($routeProvider) {
+  .config(['$routeProvider', function ($routeProvider) {
     $routeProvider
-      .when('/', {
+      .when('/view', {
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
       })
       .otherwise({
-        redirectTo: '/'
+        redirectTo: function () {
+          return '/view?res=/application';
+        }
       });
-  });
+  }]);
