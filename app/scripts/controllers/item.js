@@ -48,7 +48,7 @@ angular.module('hateoasUiApp')
       $scope.$on('linkClicked', function (e, link) {
         switch (link.method) {
         case 'DELETE':
-          $scope.remove();
+          $scope.remove(link);
           break;
         case 'PUT':
           $location.search({'res': normalizeUrl(link.href), 'edit': true, 'model': normalizeUrl(link.schema.$ref)});
@@ -82,17 +82,8 @@ angular.module('hateoasUiApp')
       /**
        * Remove an item. If successful, go to collection.
        */
-      $scope.remove = function () {
-        var href;
-
-        // find a delete link
-        $scope.response.links.forEach(function (link) {
-          if (link.method === 'DELETE') {
-            href = link.href;
-          }
-        });
-
-        $http['delete']('/api/' + normalizeUrl(href))
+      $scope.remove = function (link) {
+        $http['delete']('/api/' + normalizeUrl(link.href))
           .success(function () {
             goToCollection();
           })
