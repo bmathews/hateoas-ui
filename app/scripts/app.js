@@ -1,9 +1,6 @@
 'use strict';
 
 angular.module('hateoasUiApp', [
-  'ngCookies',
-  'ngResource',
-  'ngSanitize',
   'ngRoute',
   'ui.bootstrap'
 ])
@@ -15,7 +12,7 @@ angular.module('hateoasUiApp', [
       })
       .otherwise({
         redirectTo: function () {
-          return '/view?res=/application';
+          return '/view?res=application';
         }
       });
   }]);

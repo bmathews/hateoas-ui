@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('hateoasUiApp')
-.directive('links', ['$location', function ($location) {
+.directive('links', [function () {
 
   var name = {
     'schema/rel/self': 'Refresh',
@@ -23,13 +23,9 @@ angular.module('hateoasUiApp')
     'schema/rel/edit': 'btn-success'
   };
 
-  var normalizeUrl = function (url) {
-    return url.indexOf('/') === 0 ? url.substr(1) : url;
-  };
-
   return {
     restrict: 'A',
-    template: '<a ng-repeat="link in links" class="btn {{getBtnClass(link)}}" ng-show="showLink(link)" ng-click="clickLink(link)" >{{getLinkText(link)}}</a>',
+    template: '<a ng-repeat="link in links" class="btn {{getBtnClass(link)}}" ng-show="showLink(link)" ng-click="linkClicked(link)" >{{getLinkText(link)}}</a>',
     scope: {
       links: '='
     },
@@ -41,12 +37,8 @@ angular.module('hateoasUiApp')
       };
 
       // get a button class based off the rel type
-      scope.clickLink = function (link) {
-        if (link.method === 'PUT') {
-          $location.search('edit', link.schema.$ref);
-        } else {
-          $location.url('/view?res=/' + normalizeUrl(link.href));
-        }
+      scope.linkClicked = function (link) {
+        scope.$emit('linkClicked', link);
       };
 
       // show/hide a link based off the rel type

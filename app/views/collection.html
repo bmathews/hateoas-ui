@@ -1,5 +1,9 @@
 <div ng-controller="CollectionCtrl">
-    <div links="response.links"></div>
+    <div class="navbar navbar-default" role="navigation">
+        <div class="nav navbar-form">
+            <div links="response.links"></div>
+        </div>
+    </div>
     <h5 class="text-muted">{{response.data.items.length}} results</h5>
     <table class="table table-striped table-bordered table-hover">
         <thead>

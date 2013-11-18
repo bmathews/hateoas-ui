@@ -1,8 +1,12 @@
 <div ng-controller="ItemCtrl">
-    <div class="links" ng-hide="!!edit" links="response.links"></div>
-    <button class="btn btn-success" ng-click="saveEdit()" ng-show="!!edit && response.data">Save</button>
-    <button class="btn btn-default" ng-click="cancelEdit()" ng-show="!!edit && response.data">Cancel</button>
-    <div ng-switch="!!edit">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="nav navbar-form">
+            <div class="links" ng-hide="!!editOrCreate" links="response.links"></div>
+            <button class="btn btn-success" ng-click="save()" ng-show="!!editOrCreate && response.data">Save</button>
+            <button class="btn btn-default" ng-click="cancel()" ng-show="!!editOrCreate && response.data">Cancel</button>
+        </div>
+    </div>
+    <div ng-switch="editOrCreate">
 
         <!-- viewing -->
         <div ng-switch-when="false" class="callout" ng-hide="!response.data">

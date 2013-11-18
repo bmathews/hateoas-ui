@@ -24,3 +24,11 @@
   background-color: #f4f8fa;
   border-color: #bce8f1;
 }
+
+.navbar-form {
+  padding: 0 10px;
+}
+
+.navbar-form .btn {
+  margin-right: 6px;
+}

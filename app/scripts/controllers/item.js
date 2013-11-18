@@ -1,52 +1,115 @@
 'use strict';
 
+
+/**
+ * Handles viewing/editing/creating an item.
+ */
 angular.module('hateoasUiApp')
   .controller('ItemCtrl', ['$scope', '$rootScope', '$location', '$http',
     function ($scope, $rootScope, $location, $http) {
-      if ($location.search().edit) {
-        $scope.edit = true;
-        $http.get('/api/' + $location.search().edit)
-        .success(function (res) {
-          $scope.schema = res;
-        })
-        .error(function (res) {
-          console.error(res);
+
+      // set flags for the view to use
+      $scope.editOrCreate = !!($location.search().edit || $location.search().create);
+
+      // if we're in create mode, create a fake base
+      if ($location.search().create) {
+        $scope.response = { data: {} };
+      }
+
+      // if we're in edit or create mode, fetch the model
+      if ($scope.editOrCreate && $location.search().model) {
+        $http.get('/api/' + $location.search().model)
+          .success(function (res) {
+            $scope.schema = res;
+          })
+          .error(function (res) {
+            console.error(res);
+          });
+      }
+
+      // make sure a url doesn't have a leading slash
+      function normalizeUrl(url) {
+        return (url.indexOf('/') === 0 ? url.substr(1) : url);
+      }
+
+      // navigate to the item's collection
+      function goToCollection() {
+        var links = $scope.response.links || $scope.schema.links;
+        links.forEach(function (link) {
+          if (link.rel === 'schema/rel/collection') {
+            $location.url('/view?res=' + normalizeUrl(link.href));
+          }
         });
       }
-      $scope.saveEdit = function () {
-        var href;
-        $scope.response.links.forEach(function (link) {
-          if (link.rel === 'schema/rel/edit') {
-            href = link.href;
-          }
-        });
-        $http.put('/api/' + href, $scope.response.data)
-        .success(function () {
-          $location.search('edit', null);
-        })
-        .error(function (res) {
-          console.error(res);
-        });
+
+      /**
+       * Handle a link being clicked.
+       */
+      $scope.$on('linkClicked', function (e, link) {
+        switch (link.method) {
+        case 'DELETE':
+          $scope.remove();
+          break;
+        case 'PUT':
+          $location.search({'res': normalizeUrl(link.href), 'edit': true, 'model': normalizeUrl(link.schema.$ref)});
+          break;
+        default:
+          $location.url('/view?res=' + normalizeUrl(link.href));
+        }
+      });
+
+      /**
+       * Save an item (put/post depending on edit/create mode)
+       */
+      $scope.save = function () {
+        var href = $location.search().res || $location.search().create,
+            method = $location.search().create ? 'post' : 'put';
+
+        $http[method]('/api/' + href, $scope.response.data)
+          .success(function (res) {
+            // now view the item
+            res.links.forEach(function (link) {
+              if (link.rel === 'schema/rel/self') {
+                $location.url('/view?res=' + normalizeUrl(link.href));
+              }
+            });
+          })
+          .error(function (res) {
+            console.error(res);
+          });
       };
 
+      /**
+       * Remove an item. If successful, go to collection.
+       */
       $scope.remove = function () {
         var href;
+
+        // find a delete link
         $scope.response.links.forEach(function (link) {
-          if (link.rel === 'schema/rel/remove') {
+          if (link.method === 'DELETE') {
             href = link.href;
           }
         });
-        $http['delete']('/api/' + href)
-        .success(function (res) {
-          console.log(res);
-        })
-        .error(function (res) {
-          console.error(res);
-        });
+
+        $http['delete']('/api/' + normalizeUrl(href))
+          .success(function () {
+            goToCollection();
+          })
+          .error(function (res) {
+            console.error(res);
+          });
       };
 
-      $scope.cancelEdit = function () {
-        $location.search('edit', null);
+      /**
+       * Cancel editing/creating an item, go back to viewing or parent collection.
+       */
+      $scope.cancel = function () {
+        if ($location.search().create) {
+          $location.url('/view?res=' + $location.search().create);
+        } else {
+          $location.search('edit', null);
+        }
       };
     }
   ]);
