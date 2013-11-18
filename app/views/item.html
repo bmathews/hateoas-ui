@@ -2,53 +2,47 @@
     <div class="links" ng-hide="!!edit" links="response.links"></div>
     <button class="btn btn-success" ng-click="saveEdit()" ng-show="!!edit && response.data">Save</button>
     <button class="btn btn-default" ng-click="cancelEdit()" ng-show="!!edit && response.data">Cancel</button>
-    <hr ng-show="response.data">
     <div ng-switch="!!edit">
 
         <!-- viewing -->
-        <div ng-switch-when="false" class="well form-horizontal" ng-hide="!response.data">
+        <div ng-switch-when="false" class="callout" ng-hide="!response.data">
             <div class="form-group" ng-hide="key=='uri'||key=='_id'" ng-repeat="(key,val) in response.data">
-                <label class="col-sm-2 control-label">{{key}}</label>
-                <div class="col-sm-10">
-                    <div style="padding: 6px 12px;">{{val}}</div>
-                </div>
+                <label class="text-muted control-label">{{key}}</label>
+                <p class="form-control-static">{{val}}</p>
             </div>
         </div>
 
         <!-- editing -->
-        <div ng-switch-when="true" class="well form-horizontal" ng-hide="!schema.properties||!response.data">
+        <div ng-switch-when="true" class="callout" ng-hide="!schema.properties||!response.data">
             <div class="form-group" ng-hide="key=='uri'||key=='_id'" ng-repeat="(key,val) in schema.properties">
-                <label class="col-sm-2 control-label">{{key}}</label>
-                <div class="col-sm-6">
-                    <div ng-switch="val.type">
+                <label class="text-muted control-label">{{key}}</label>
+                <div ng-switch="val.type">
 
-                        <!-- strings / enums -->
-                        <div ng-switch-when="string">
-                            <div ng-switch="!!val.enum">
-                                <input ng-switch-default="false" class="form-control" type="text" ng-readonly="val.readonly" ng-model="response.data[key]">
-                                <div ng-switch-when="true" class="dropdown">
-                                  <a class="btn btn-default dropdown-toggle">
-                                    {{response.data[key]}} <span class="caret"></span>
-                                  </a>
-                                  <ul class="dropdown-menu">
-                                    <li ng-repeat="choice in val.enum">
-                                      <a ng-click="response.data[key]=choice">{{choice}}</a>
-                                    </li>
-                                  </ul>
-                                </div>
+                    <!-- strings / enums -->
+                    <div ng-switch-when="string">
+                        <div ng-switch="!!val.enum">
+                            <input ng-switch-default="false" class="form-control" type="text" ng-readonly="val.readonly" ng-model="response.data[key]">
+                            <div ng-switch-when="true" class="btn-block dropdown">
+                              <a class="btn btn-default dropdown-toggle">
+                                {{response.data[key]}} <span class="caret"></span>
+                              </a>
+                              <ul class="dropdown-menu">
+                                <li ng-repeat="choice in val.enum">
+                                  <a ng-click="response.data[key]=choice">{{choice}}</a>
+                                </li>
+                              </ul>
                             </div>
                         </div>
-
-                        <!-- number -->
-                        <input ng-switch-when="number" type="number" class="form-control" ng-readonly="val.readonly" ng-model="response.data[key]">
-
-                        <!-- date -->
-                        <input ng-switch-when="date" type="date" class="form-control" ng-readonly="val.readonly" ng-model="response.data[key]">
                     </div>
-                    
-                    <p class="help-block">{{val.description}}</p>
-                    
+
+                    <!-- number -->
+                    <input ng-switch-when="number" type="number" class="form-control" ng-readonly="val.readonly" ng-model="response.data[key]">
+
+                    <!-- date -->
+                    <input ng-switch-when="date" type="date" class="form-control" ng-readonly="val.readonly" ng-model="response.data[key]">
+
                 </div>
+                <p class="help-block">{{val.description}}</p>
             </div>
         </div>
 

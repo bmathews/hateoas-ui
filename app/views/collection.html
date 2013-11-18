@@ -1,10 +1,9 @@
 <div ng-controller="CollectionCtrl">
     <div links="response.links"></div>
-    <h4> {{response.data.items.length}} results</h4>
-    <hr ng-show="response.data">
+    <h5 class="text-muted">{{response.data.items.length}} results</h5>
     <table class="table table-striped table-bordered table-hover">
         <thead>
-            <th ng-hide="key=='uri'||key=='_id'" ng-repeat="(key,val) in response.data.items[0]">{{key}}</th>
+            <th class="text-muted" style="text-transform: uppercase; font-size: 12px;" ng-hide="key=='uri'||key=='_id'" ng-repeat="(key,val) in response.data.items[0]">{{key}}</th>
         </thead>
         <tbody>
             <tr style="cursor: pointer;" ng-click="itemClick(item)" ng-repeat="item in response.data.items">
