@@ -31,12 +31,12 @@ angular.module('hateoasUiApp')
     },
     link: function (scope) {
 
-      // get a button class based off the rel type
+      // get a button class based off the link method
       scope.getBtnClass = function (link) {
         return btnClass[link.method] || 'btn-default';
       };
 
-      // get a button class based off the rel type
+      // emit that a link was clicked
       scope.linkClicked = function (link) {
         scope.$emit('linkClicked', link);
       };
