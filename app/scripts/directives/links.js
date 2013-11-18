@@ -18,9 +18,9 @@ angular.module('hateoasUiApp')
   };
 
   var btnClass = {
-    'schema/rel/create': 'btn-primary',
-    'schema/rel/remove': 'btn-danger',
-    'schema/rel/edit': 'btn-success'
+    'POST': 'btn-primary',
+    'DELETE': 'btn-danger',
+    'PUT': 'btn-success'
   };
 
   return {
@@ -33,7 +33,7 @@ angular.module('hateoasUiApp')
 
       // get a button class based off the rel type
       scope.getBtnClass = function (link) {
-        return btnClass[link.rel] || 'btn-default';
+        return btnClass[link.method] || 'btn-default';
       };
 
       // get a button class based off the rel type
