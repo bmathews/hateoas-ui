@@ -59,7 +59,7 @@ module.exports = function (grunt) {
       options: {
         port: 9000,
         // Change this to '0.0.0.0' to access the server from outside.
-        hostname: 'localhost',
+        hostname: '0.0.0.0',
         livereload: 35729
       },
       proxies : [{
@@ -98,7 +98,14 @@ module.exports = function (grunt) {
       },
       dist: {
         options: {
-          base: '<%= yeoman.dist %>'
+          base: ['<%= yeoman.dist %>'],
+          middleware: function (connect, options) {
+            var mws = [proxySnippet];
+            options.base.forEach(function(base) {
+              mws.push(connect.static(base));
+            });
+            return mws;
+          }
         }
       }
     },
@@ -315,7 +322,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('server', function (target) {
     if (target === 'dist') {
-      return grunt.task.run(['build', 'connect:dist:keepalive']);
+      return grunt.task.run(['build', 'configureProxies', 'connect:dist:keepalive']);
     }
 
     grunt.task.run([
