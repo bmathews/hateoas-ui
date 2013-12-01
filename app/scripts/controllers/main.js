@@ -26,7 +26,7 @@ angular.module('hateoasUiApp')
           if (part.length) {
             $scope.breadcrumbs.push({
               path: "#/view?res=" + resource.split("/").slice(0, i + 1).join("/"),
-              title: part
+              title: part.charAt(0).toUpperCase() + part.slice(1)
             });
           }
         });
