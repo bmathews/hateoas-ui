@@ -15,7 +15,7 @@ angular.module('hateoasUiApp')
           );
           break;
         default:
-          $location.url('/view?res=/' + (link.href.indexOf('/') === 0 ? link.href.substr(1) : link.href));
+          $location.url('/view?res=' + (link.href.indexOf('/') === 0 ? link.href.substr(1) : link.href));
         }
       });
 
