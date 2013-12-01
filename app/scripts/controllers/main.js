@@ -19,6 +19,17 @@ angular.module('hateoasUiApp')
           .error(function (res) {
             console.error(res);
           });
+
+        $scope.breadcrumbs = [];
+        var urlSplit = resource.split('/');
+        urlSplit.forEach(function (part, i) {
+          if (part.length) {
+            $scope.breadcrumbs.push({
+              path: "#/view?res=" + resource.split("/").slice(0, i + 1).join("/"),
+              title: part
+            });
+          }
+        });
       } else {
         $scope.loaded = true;
       }
