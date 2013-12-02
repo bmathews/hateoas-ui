@@ -7,10 +7,6 @@
     <h3 class="text-muted">hateoas ui</h3>
 </div>
 <hr>
-<ol class="breadcrumb" style="margin-top: 20px;">
-    <li ng-repeat="breadcrumb in breadcrumbs.slice(0, breadcrumbs.length - 1)"><a ng-href="{{ breadcrumb.path }}">{{breadcrumb.title}}</a></li>
-    <li class="active">{{breadcrumbs[breadcrumbs.length - 1].title}}</li>
-</ol>
 <div ng-switch="!!response.data.items">
     <div ng-switch-when="true"><div ng-include="'views/collection.html'"></div></div>
     <div ng-switch-when="false"><div ng-include="'views/item.html'"></div></div>
@@ -18,3 +14,7 @@
 <div style="margin: auto; width: 200px;" class="alert alert-info text-center" ng-hide="loaded">
     Loading...
 </div>
+<ol class="breadcrumb" style="margin-top: 20px;">
+    <li ng-repeat="breadcrumb in breadcrumbs.slice(0, breadcrumbs.length - 1)"><a ng-href="{{ breadcrumb.path }}">{{breadcrumb.title}}</a></li>
+    <li class="active">{{breadcrumbs[breadcrumbs.length - 1].title}}</li>
+</ol>
